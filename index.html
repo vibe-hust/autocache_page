@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="AutoCache uses an LLM agent to discover caching policies for image and video generation. Explore matched results and measured speedups.">
   <title>AutoCache: Agent-Designed Caching for Image and Video Generation</title>
-  <link rel="stylesheet" href="site.css?v=hero-overview">
+  <link rel="stylesheet" href="site.css?v=button-tone-all">
   <script src="assets/media/manifest.js" defer></script>
   <script src="assets/media/showcase.js" defer></script>
-  <script src="app.js?v=hero-overview" defer></script>
+  <script src="app.js?v=showcase-open" defer></script>
   <link rel="stylesheet" href="./project-meta.css">
   <link rel="canonical" href="https://vibe-hust.github.io/autocache_page/">
 </head>
@@ -17,6 +17,7 @@
     <div class="media-shell site-header-inner">
       <a class="site-brand" href="#top">AutoCache</a>
       <nav aria-label="On this page">
+        <a href="#abstract">Abstract</a>
         <a href="#method">Method</a>
         <a href="#videos">Video results</a>
         <a href="#images">Image results</a>
@@ -25,58 +26,51 @@
     </div>
   </header>
   <main id="top">
-    <section class="hero" aria-labelledby="title">
-      <header class="media-shell hero-heading">
-        <h1 class="project-title" id="title">AutoCache: Agent-Designed Caching for Image and Video Generation</h1>
-        <div class="project-meta"><p class="project-authors"><a href="https://github.com/shuiiiiyu">Canyu Shen</a><sup>1</sup> · <a href="https://github.com/cheyan9">Yang Chen</a><sup>2</sup> · <a href="https://github.com/TetuDegit">Gezhi Zhu</a><sup>2</sup> · <a href="https://www.cwi.nl/en/people/xuemei-zhou/">Xuemei Zhou</a><sup>3</sup> · <a href="https://tenglon.github.io/">Teng Long</a><sup>4</sup> · <a href="https://taohu.me/">Vincent Tao Hu</a><sup>2</sup></p><p class="project-affiliations"><sup>1</sup>Tongji University · <sup>2</sup>Huazhong University of Science and Technology<br><sup>3</sup>Centrum voor Wiskunde en Informatica (CWI) · <sup>4</sup>University of Trento</p><p class="project-links"><a href="https://github.com/vibe-hust/autocache_code">Code</a><a href="https://github.com/vibe-hust">VibeLab</a></p></div>
-        <div class="hero-overview">
-          <p class="hero-description">AutoCache speeds up diffusion inference by reusing computation across denoising steps.</p>
-          <ul class="hero-results" aria-label="AutoCache Single speedups">
-            <li><strong>3.14×</strong> Qwen-Image-2.1</li>
-            <li><strong>1.99×</strong> FLUX3-Image-Klein-Base</li>
-            <li><strong>2.41×</strong> Wan2.1-T2V-1.3B</li>
-          </ul>
-          <p class="hero-baseline">Speedup relative to uncached inference</p>
-          <section class="benchmark-scope" aria-labelledby="benchmark-scope-title">
-            <h2 id="benchmark-scope-title">Backbones and benchmarks</h2>
-            <div class="method-scope">
-              <div class="method-scope-item">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#scene-icon-image"></use></svg>
-                <div>
-                  <h3>Image generation</h3>
-                  <p><strong>Qwen-Image-2.1</strong> and <strong>FLUX3-Image-Klein-Base</strong></p>
-                  <p>DrawBench</p>
-                  <p>GenEval 2 · Qwen policy transfer</p>
-                  <p>DrawBench · FLUX3 policy transfer to <strong>FLUX.1-dev</strong></p>
-                </div>
-              </div>
-              <div class="method-scope-item">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#scene-icon-video"></use></svg>
-                <div>
-                  <h3>Video generation</h3>
-                  <p><strong>Wan2.1-T2V-1.3B</strong></p>
-                  <p>VBench</p>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </header>
-      <div class="hero-showcase">
-        <figure class="media-shell hero-figure" id="hero-comparison" aria-label="Original and AutoCache video showcase">
-          <div class="scene-switcher" role="group" aria-label="Showcase scenes"></div>
-          <div class="hero-stage">
-            <div class="hero-panels" id="hero-panels"></div>
-            <button class="carousel-arrow carousel-prev" type="button" aria-label="Previous video example" aria-controls="hero-panels" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#carousel-arrow-icon"></use></svg></button>
-            <button class="carousel-arrow carousel-next" type="button" aria-label="Next video example" aria-controls="hero-panels" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#carousel-arrow-icon"></use></svg></button>
+    <header class="hero-header">
+        <div class="media-shell hero-heading">
+          <h1 class="project-title" id="title">AutoCache: Agent-Designed Caching for Image and Video Generation</h1>
+          <div class="project-meta">
+            <p class="project-authors"><a href="https://github.com/shuiiiiyu">Canyu Shen</a><sup>1</sup> · <a href="https://github.com/cheyan9">Yang Chen</a><sup>2</sup> · <a href="https://github.com/TetuDegit">Gezhi Zhu</a><sup>2</sup> · <a href="https://www.cwi.nl/en/people/xuemei-zhou/">Xuemei Zhou</a><sup>3</sup> · <a href="https://tenglon.github.io/">Teng Long</a><sup>4</sup> · <a href="https://taohu.me/">Vincent Tao Hu</a><sup>2</sup></p>
+            <p class="project-affiliations"><sup>1</sup>Tongji University · <sup>2</sup>Huazhong University of Science and Technology<br><sup>3</sup>Centrum voor Wiskunde en Informatica (CWI) · <sup>4</sup>University of Trento</p>
+            <p class="project-links">
+              <a href="https://github.com/vibe-hust/autocache_code"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#project-icon-github"></use></svg>Code</a>
+              <a href="https://github.com/vibe-hust"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#project-icon-github"></use></svg>VibeLab</a>
+              <a href="#method-walkthrough"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#scene-icon-video"></use></svg>Video</a>
+            </p>
           </div>
-          <figcaption class="hero-caption">
-            <span class="prompt" aria-live="polite"></span>
-            <button class="play" type="button" hidden></button>
-            <span class="video-status" role="status" hidden></span>
-          </figcaption>
-        </figure>
-      </div>
+        </div>
+    </header>
+    <p class="media-shell hero-description">AutoCache speeds up diffusion inference by reusing computation across denoising steps.</p>
+    <div class="hero-showcase">
+      <figure class="media-shell hero-figure" id="hero-comparison" aria-label="Original and AutoCache video showcase">
+        <div class="scene-switcher" role="group" aria-label="Showcase scenes"></div>
+        <div class="hero-stage">
+          <div class="hero-panels" id="hero-panels"></div>
+          <button class="carousel-arrow carousel-prev" type="button" aria-label="Previous video example" aria-controls="hero-panels" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#carousel-arrow-icon"></use></svg></button>
+          <button class="carousel-arrow carousel-next" type="button" aria-label="Next video example" aria-controls="hero-panels" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#carousel-arrow-icon"></use></svg></button>
+        </div>
+        <figcaption class="hero-caption">
+          <span class="prompt" aria-live="polite"></span>
+          <button class="play" type="button" hidden></button>
+          <span class="video-status" role="status" hidden></span>
+        </figcaption>
+      </figure>
+      <button class="hero-toggle" type="button" aria-label="Collapse floating video showcase" aria-expanded="true" aria-controls="hero-comparison" title="Collapse floating video showcase">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 15 6-6 6 6"/></svg>
+      </button>
+    </div>
+    <div class="media-shell hero-overview">
+      <ul class="hero-results" aria-label="AutoCache Single speedups">
+        <li><strong>3.14×</strong> Qwen-Image-2.1</li>
+        <li><strong>1.99×</strong> FLUX3-Image-Klein-Base</li>
+        <li><strong>2.41×</strong> Wan2.1-T2V-1.3B</li>
+      </ul>
+      <p class="hero-baseline">Measured generation speedup over uncached inference · DrawBench for images · VBench for video</p>
+    </div>
+
+    <section class="media-shell section" id="abstract" aria-labelledby="abstract-heading">
+      <h2 id="abstract-heading">Abstract</h2>
+      <p class="abstract-copy">Diffusion sampling is expensive because it repeatedly evaluates a large backbone. Caching accelerates it by reusing computations across steps. Existing methods use hand-designed signals and decision rules to determine when reuse is appropriate. These choices require expertise to develop. We introduce <strong>AutoCache</strong>, a training-free framework that uses a large language model (LLM) search agent to automatically discover caching policies for image and video generation. Each policy extracts signals from the sampling state and decides whether to compute the full backbone or reuse its cached residual. AutoCache searches these policies through repeated proposal and evaluation. The selected policies run directly during sampling without additional LLM calls. Across Qwen-Image-2.1, FLUX3-Image-Klein-Base, and Wan2.1-T2V-1.3B, one selected policy per backbone achieves 1.99–3.14× speedups over uncached inference while improving reference fidelity over the evaluated caching baselines.</p>
     </section>
 
     <section class="media-shell section" id="method" aria-labelledby="method-heading">
@@ -85,20 +79,24 @@
       <figure class="method-walkthrough" id="method-walkthrough">
         <div class="method-chapters" role="group" aria-label="Animation chapters">
           <button type="button" data-start="0" aria-controls="method-video" aria-current="true">Speedup</button>
-          <button type="button" data-start="18" aria-controls="method-video">Observations</button>
-          <button type="button" data-start="26" aria-controls="method-video">Policy code</button>
-          <button type="button" data-start="49" aria-controls="method-video">NEW / REUSE</button>
-          <button type="button" data-start="97" aria-controls="method-video">Evaluation</button>
+          <button type="button" data-start="17.5" aria-controls="method-video">Agent observations</button>
+          <button type="button" data-start="25.3" aria-controls="method-video">Agent actions</button>
+          <button type="button" data-start="43.8" aria-controls="method-video">Denoising trajectory</button>
+          <button type="button" data-start="80" aria-controls="method-video">Search round</button>
+          <button type="button" data-start="90.9" aria-controls="method-video">Candidate evaluation</button>
+          <button type="button" data-start="102.5" aria-controls="method-video">Overview</button>
         </div>
-        <video id="method-video" controls playsinline preload="metadata" width="1920" height="1080"
-          poster="assets/paper/method.webp" aria-label="AutoCache method animation">
+        <video id="method-video" controls muted playsinline preload="metadata" width="1920" height="1080"
+          poster="assets/paper/method.webp" aria-label="AutoCache method animation"
+          aria-describedby="race-caption">
           <source src="assets/media/method-walkthrough.mp4" type="video/mp4">
           <a href="assets/media/method-walkthrough.mp4">Download the method animation</a>
         </video>
+        <figcaption class="result-note" id="race-caption">The opening compares backbone calls across two 40-step denoising trajectories. On held-out DrawBench, mean Qwen-Image-2.1 latency drops from <strong>8.82 s to 2.81 s per image</strong> on H100 at batch size one.</figcaption>
       </figure>
     </section>
 
-    <section class="section comparison-section" id="videos" aria-labelledby="videos-heading">
+    <section class="section" id="videos" aria-labelledby="videos-heading">
       <div class="media-shell">
         <h2 id="videos-heading">Video comparisons</h2>
         <div id="video-gallery">
@@ -130,7 +128,7 @@
       </div>
     </section>
 
-    <section class="section comparison-section" id="images" aria-labelledby="images-heading">
+    <section class="section" id="images" aria-labelledby="images-heading">
       <div class="media-shell">
         <header class="image-heading">
           <h2 id="images-heading">Image comparisons</h2>
@@ -154,22 +152,39 @@
 
     <section class="media-shell section" id="results" aria-labelledby="results-heading">
       <h2 id="results-heading">Speed and reference fidelity</h2>
-      <p class="text-panel result-note">Across Qwen-Image-2.1, FLUX3-Image-Klein-Base, and Wan2.1, AutoCache has higher PSNR and SSIM and lower LPIPS than the three plotted baselines. Its best speedups are <strong>3.38×, 2.58×, and 2.45×</strong>, respectively. Each AutoCache radar axis shows the best result for that metric among the selected policies. The Qwen development-set sweep on the right pairs speed and fidelity for each policy and shows that AutoCache retains higher PSNR than SeaCache at comparable speedups.</p>
       <figure class="result-figure">
-        <img src="assets/paper/figure1.svg" width="1260" height="288" alt="Figure 1. Reference fidelity and speed comparisons for Qwen-Image-2.1, FLUX3-Image-Klein-Base, and Wan2.1-1.3B, with the Qwen-Image-2.1 PSNR–speedup trade-off." aria-describedby="figure1-legend" loading="lazy">
-        <figcaption class="chart-key" id="figure1-legend">
-          <span class="teacache-key" style="--swatch: #839098">TeaCache (CVPR 2025)</span>
-          <span style="--swatch: #0077bb">SeaCache (CVPR 2026)</span>
-          <span style="--swatch: #47c1a3">DiCache (ICLR 2026)</span>
-          <span style="--swatch: #e76f51">AutoCache (Ours)</span>
+        <img src="assets/paper/figure1.svg" width="1260" height="288" alt="Figure 1. Reference fidelity and speed comparisons for Qwen-Image-2.1, FLUX3-Image-Klein-Base, and Wan2.1-1.3B, with the Qwen-Image-2.1 PSNR–speedup trade-off." aria-describedby="figure1-caption" loading="lazy">
+        <figcaption id="figure1-caption">
+          <div class="chart-key">
+            <span class="teacache-key" style="--swatch: #839098">TeaCache (CVPR 2025)</span>
+            <span style="--swatch: #0077bb">SeaCache (CVPR 2026)</span>
+            <span style="--swatch: #47c1a3">DiCache (ICLR 2026)</span>
+            <span style="--swatch: #e76f51">AutoCache (Ours)</span>
+          </div>
+          <p class="result-note">AutoCache improves PSNR, SSIM, and LPIPS over the plotted baselines on all three backbones. The radar plots show the best result for each metric across the selected policies, with speedups of <strong>3.38× on Qwen, 2.58× on FLUX3, and 2.45× on Wan2.1</strong>. The Qwen development-set curve pairs speed and PSNR for each policy and shows higher fidelity than SeaCache at comparable speedups.</p>
         </figcaption>
       </figure>
+      <section class="evaluation-setup" aria-labelledby="benchmark-scope-title">
+        <h3 id="benchmark-scope-title">Backbones and benchmarks</h3>
+        <div class="transfer-table">
+          <table aria-labelledby="benchmark-scope-title">
+            <thead>
+              <tr><th scope="col">Backbone</th><th scope="col">Benchmark</th><th scope="col">Development</th><th scope="col">Evaluation</th><th scope="col">Steps</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Qwen-Image-2.1</th><td>DrawBench</td><td>30</td><td>170</td><td>40</td></tr>
+              <tr><th scope="row">FLUX3-Image-Klein-Base</th><td>DrawBench</td><td>30</td><td>170</td><td>50</td></tr>
+              <tr><th scope="row">Wan2.1-T2V-1.3B</th><td>VBench</td><td>124</td><td>820</td><td>50</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="result-note">Split sizes count prompts. Policies are selected on the development set and frozen before held-out testing. Reference fidelity uses uncached outputs generated with the same prompts and seeds.</p>
+      </section>
     </section>
 
-    <section class="transfer" aria-labelledby="transfer-heading">
+    <section class="section transfer" aria-labelledby="transfer-heading">
       <div class="media-shell">
-        <h3 id="transfer-heading">Frozen-policy transfer</h3>
-        <p class="text-panel result-note">On FLUX.1-dev, the frozen policy achieves the highest reference fidelity among the compared methods at <strong>1.96×</strong> speedup. On GenEval 2, the transferred Qwen policy leads on fidelity and speedup at <strong>3.02×</strong>. Both policies transfer without a new search.</p>
+        <h2 id="transfer-heading">Frozen-policy transfer</h2>
         <div class="transfer-grid">
           <div class="transfer-table">
             <table>
@@ -201,6 +216,7 @@
             </table>
           </div>
         </div>
+        <p class="result-note">The frozen FLUX3 policy achieves the highest reference fidelity on FLUX.1-dev at <strong>1.96×</strong> speedup. On GenEval 2, the frozen Qwen policy leads on fidelity and speedup at <strong>3.02×</strong>. Both transfer without a new search.</p>
       </div>
     </section>
   </main>
@@ -212,69 +228,11 @@
     </figure>
   </template>
   <svg class="scene-icons" width="0" height="0" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="project-icon-github" viewBox="0 0 24 24">
+      <path fill="currentColor" stroke="none" d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.38.6.11.82-.26.82-.58v-2.24c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.33-1.76-1.33-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.83 1.23 1.83 1.23 1.07 1.84 2.81 1.31 3.49 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.29-1.23 3.29-1.23.66 1.65.24 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.82 1.1.82 2.22v3.32c0 .32.22.69.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+    </symbol>
     <symbol id="carousel-arrow-icon" viewBox="0 0 24 24">
       <path d="M19 12H5m6-6-6 6 6 6"/>
-    </symbol>
-    <symbol id="scene-icon-helmet" viewBox="0 0 24 24">
-      <path d="M4 12a8 8 0 0 1 16 0v2a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM8 19v2h8v-2M2 12h2m16 0h2"/>
-      <path d="M7 11a11 11 0 0 1 10 0v2a3 3 0 0 1-3 3h-4a3 3 0 0 1-3-3z"/>
-    </symbol>
-    <symbol id="scene-icon-umbrella" viewBox="0 0 24 24">
-      <path d="M3 12a9 9 0 0 1 18 0zM12 3V2m0 10v7a2 2 0 0 0 4 0"/>
-      <path d="M12 3c-2.5 2-4 5-4 9m4-9c2.5 2 4 5 4 9"/>
-    </symbol>
-    <symbol id="scene-icon-skier" viewBox="0 0 24 24">
-      <circle cx="15" cy="4" r="1.6"/>
-      <path d="m6 10 4-2 4 3 4 1m-8-4-2 6 5 3m-5-3-4 3M18 12l-3 7M3 19l15 3a2.6 2.6 0 0 0 2.6-1"/>
-    </symbol>
-    <symbol id="scene-icon-music" viewBox="0 0 24 24">
-      <path d="M9 17V6l10-3v11M9 10l10-3"/>
-      <ellipse cx="6.5" cy="17.7" rx="2.5" ry="1.8"/>
-      <ellipse cx="16.5" cy="14.7" rx="2.5" ry="1.8"/>
-    </symbol>
-    <symbol id="scene-icon-oven" viewBox="0 0 24 24">
-      <rect x="4" y="3" width="16" height="18" rx="2"/>
-      <path d="M4 8h16M8 5.5h.1m3.9 0h.1m3.9 0h.1M7 14h10m-10 3h10"/>
-    </symbol>
-    <symbol id="scene-icon-guitar" viewBox="0 0 24 24">
-      <g transform="rotate(27 12 12)">
-        <path d="M11 5v6m2-6v6M10 2h4v3h-4zM11 11c-2-2-5-1-5 1 0 1.5 1.2 2 1.2 3 0 1-2 1.4-2 3.5C5.2 21 8 22 12 22s6.8-1 6.8-3.5c0-2.1-2-2.5-2-3.5 0-1 1.2-1.5 1.2-3 0-2-3-3-5-1M10 19h4"/>
-        <circle cx="12" cy="15" r="1.5"/>
-      </g>
-    </symbol>
-    <symbol id="scene-icon-violin" viewBox="0 0 24 24">
-      <path d="M9 5v5m2-5v5M8 2h4v3H8zm1 8c-2-1-4 0-4 2 0 1.5 2 1.5 2 3s-2.5 1.5-2.5 4c0 2 2 3 5.5 3s5.5-1 5.5-3c0-2.5-2.5-2.5-2.5-4s2-1.5 2-3c0-2-2-3-4-2M10 11v8M8.5 17.5h3M19 3v18m2-17v16"/>
-    </symbol>
-    <symbol id="scene-icon-fireworks" viewBox="0 0 24 24">
-      <path d="M12 2v4m0 5v3M5 8h4m6 0h4M7 3l2 2m6 6 2 2m0-10-2 2m-6 6-2 2M3 22h18m-16 0v-5h4v5m2 0v-6h4v6m2 0v-3h3v3"/>
-    </symbol>
-    <symbol id="scene-icon-dog" viewBox="0 0 24 24">
-      <path d="M8 6C5 3 3 6 3 10v3c0 1 1 1.5 2 1l2-2m9-6c3-3 5 0 5 4v3c0 1-1 1.5-2 1l-2-2M7 12v3a5 5 0 0 0 5 5h0a5 5 0 0 0 5-5v-3M8 6c2-2 6-2 8 0M10 15h4l-2 2zM9 11h.1m5.9 0h.1"/>
-    </symbol>
-    <symbol id="scene-icon-panda" viewBox="0 0 24 24">
-      <ellipse cx="12" cy="12.5" rx="8.5" ry="7.5"/>
-      <path d="M4.5 9A3.1 3.1 0 1 1 8 5.9m8 0A3.1 3.1 0 1 1 19.5 9"/>
-      <ellipse cx="8.5" cy="12" rx="1.45" ry="2" transform="rotate(25 8.5 12)"/>
-      <ellipse cx="15.5" cy="12" rx="1.45" ry="2" transform="rotate(-25 15.5 12)"/>
-      <path d="M11 15.5h2l-1 1z"/>
-    </symbol>
-    <symbol id="scene-icon-shark" viewBox="0 0 24 24">
-      <path d="M2 13c2-2 4.5-3 7-3.5L13 5l1 4.5c2 .3 3.5 1 5 2l3-3-1 4 1 4-3-2.5c-2 1.3-4 1.8-6 2l1 3-4-3c-3-.2-6-1-8-3zM6 12.5h.1m2 2-3 .5"/>
-    </symbol>
-    <symbol id="scene-icon-cloud" viewBox="0 0 24 24">
-      <path d="M7 18a4 4 0 1 1 .4-8 5 5 0 0 1 9.7.7A3.7 3.7 0 1 1 18 18z"/>
-    </symbol>
-    <symbol id="scene-icon-waves" viewBox="0 0 24 24">
-      <path d="M2 10a4.2 4.2 0 0 0 5 0 4.2 4.2 0 0 1 5 0 4.2 4.2 0 0 0 5 0 4.2 4.2 0 0 1 5 0M2 15a4.2 4.2 0 0 0 5 0 4.2 4.2 0 0 1 5 0 4.2 4.2 0 0 0 5 0 4.2 4.2 0 0 1 5 0M2 20a4.2 4.2 0 0 0 5 0 4.2 4.2 0 0 1 5 0 4.2 4.2 0 0 0 5 0 4.2 4.2 0 0 1 5 0"/>
-    </symbol>
-    <symbol id="scene-icon-fridge" viewBox="0 0 24 24">
-      <rect x="5" y="2" width="14" height="19" rx="2"/>
-      <path d="M5 9h14M8 5v2m0 5v4M8 21v1m8-1v1"/>
-    </symbol>
-    <symbol id="scene-icon-image" viewBox="0 0 24 24">
-      <rect x="3" y="5" width="18" height="14" rx="2"/>
-      <circle cx="8" cy="9" r="1.3"/>
-      <path d="m4 17 5-4 3 2 4-5 5 6"/>
     </symbol>
     <symbol id="scene-icon-video" viewBox="0 0 24 24">
       <rect x="3" y="5" width="18" height="14" rx="2"/>

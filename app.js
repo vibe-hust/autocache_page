@@ -15,23 +15,21 @@ const paperCases = [
   {
     id: 'astronaut', kind: 'video', title: 'Astronaut near Earth',
     prompt: 'An astronaut flying in space, zoom in', model: 'Wan2.1-T2V-1.3B · VBench',
-    time: '5 s', icon: 'helmet',
+    time: '5 s',
   },
   {
     id: 'skier', kind: 'video', title: 'Skier on the slope',
     prompt: 'skis on the bottom of a snowboard, front view', model: 'Wan2.1-T2V-1.3B · VBench',
-    time: '3.25 s', icon: 'skier',
+    time: '3.25 s',
   },
   {
     id: 'guitars', kind: 'image', title: 'Guitars and suitcases',
     prompt: 'three guitars and two brown suitcases', model: 'Qwen-Image-2.1 · GenEval 2',
-    icon: 'guitar',
     hotspot: { label: 'Guitar body and hardware', box: [4.3, 57.62, 30.47, 22.85] },
   },
   {
     id: 'zebra', kind: 'image', title: 'Violin and zebra',
     prompt: 'a sparkling violin on top of a zebra, and a truck', model: 'Qwen-Image-2.1 · GenEval 2',
-    icon: 'violin',
     hotspot: { label: 'Violin outline and zebra stripes', box: [7.42, 49.22, 28.12, 28.12] },
   },
 ];
@@ -142,13 +140,28 @@ function bindPlayback(article) {
       video.currentTime = start;
       return video.play();
     }));
-    if (article.contains(first) && results.some(result => result.status === 'rejected')) {
+    if (article.contains(first) && results.some(result => result.status === 'rejected' && result.reason.name !== 'AbortError')) {
       videos.forEach(video => video.pause());
       status.textContent = 'A clip could not be played. Check the media file or try the individual controls.';
       status.hidden = false;
     }
   };
 }
+
+function observeViewportVisibility(topInset, threshold, onVisibilityChange) {
+  return new IntersectionObserver(entries => {
+    for (const { target, intersectionRatio } of entries) {
+      onVisibilityChange(target, intersectionRatio >= threshold);
+    }
+  }, { rootMargin: `-${topInset}px 0px 0px`, threshold });
+}
+
+function setVideoPlayback(video, visible) {
+  if (visible) video.play().catch(() => {});
+  else video.pause();
+}
+
+const showcasePlayback = observeViewportVisibility(55, 0.5, setVideoPlayback);
 
 function renderShowcase(scenes) {
   const hero = document.querySelector('#hero-comparison');
@@ -159,10 +172,14 @@ function renderShowcase(scenes) {
     return source?.video || source?.image;
   }));
   bindSceneSwitcher(hero, hero, slides, scene => {
-    for (const video of panels.querySelectorAll('video')) video.pause();
+    for (const video of panels.querySelectorAll('video')) {
+      showcasePlayback.unobserve(video);
+      video.pause();
+    }
     panels.replaceChildren(...pair.map(([key, name]) => makeTile(name, scene.methods[key], scene)));
     hero.querySelector('.prompt').textContent = scene.prompt;
     bindPlayback(hero);
+    for (const video of panels.querySelectorAll('video')) showcasePlayback.observe(video);
   });
 }
 
@@ -196,6 +213,7 @@ function bindComparisonTimeline(panel, videos, keyframe) {
   let duration = 0;
   let playing = false;
   let request = 0;
+  let autoplayPending = false;
 
   if (keyframe) {
     const timestamp = `${keyframe.time.toFixed(2)} s`;
@@ -222,6 +240,10 @@ function bindComparisonTimeline(panel, videos, keyframe) {
     keyframeJump.hidden = keyframeHint.hidden = !keyframe || duration === 0 || keyframe.time >= duration;
     if (!keyframeJump.hidden) keyframeJump.style.left = `${(keyframe.time / duration) * 100}%`;
     updateTime();
+    if (autoplayPending && duration > 0) {
+      autoplayPending = false;
+      playAll();
+    }
   }
 
   function leaveGroupPlayback() {
@@ -257,11 +279,8 @@ function bindComparisonTimeline(panel, videos, keyframe) {
     status.hidden = false;
   }
 
-  button.addEventListener('click', async () => {
-    if (playing) {
-      pauseAll();
-      return;
-    }
+  async function playAll() {
+    if (playing) return;
     status.hidden = true;
     const currentRequest = ++request;
     seekAll(leader.ended || leader.currentTime >= duration ? 0 : leader.currentTime);
@@ -269,6 +288,11 @@ function bindComparisonTimeline(panel, videos, keyframe) {
     button.textContent = 'Pause all';
     const results = await Promise.allSettled(videos.map(video => video.play()));
     if (currentRequest === request && results.some(result => result.status === 'rejected')) showPlaybackError();
+  }
+
+  button.addEventListener('click', () => {
+    if (playing) pauseAll();
+    else playAll();
   }, options);
 
   slider.addEventListener('input', () => seekTogether(slider.valueAsNumber), options);
@@ -304,9 +328,16 @@ function bindComparisonTimeline(panel, videos, keyframe) {
   pauseAll();
   updateDuration();
 
-  return () => {
-    events.abort();
-    pauseAll();
+  return {
+    setVisible(visible) {
+      autoplayPending = visible && duration === 0;
+      if (!visible) pauseAll();
+      else if (!autoplayPending) playAll();
+    },
+    dispose() {
+      events.abort();
+      pauseAll();
+    },
   };
 }
 
@@ -317,7 +348,6 @@ function bindSceneSwitcher(gallery, panel, examples, renderScene) {
   const switcher = gallery.querySelector('.scene-switcher');
   const previous = panel.querySelector('.carousel-prev');
   const next = panel.querySelector('.carousel-next');
-  const svgNamespace = 'http://www.w3.org/2000/svg';
   let selected = -1;
   const buttons = examples.map((scene, index) => {
     const button = document.createElement('button');
@@ -325,13 +355,6 @@ function bindSceneSwitcher(gallery, panel, examples, renderScene) {
     button.title = scene.title;
     button.setAttribute('aria-label', scene.title);
     button.setAttribute('aria-controls', panel.id);
-    const icon = document.createElementNS(svgNamespace, 'svg');
-    icon.setAttribute('viewBox', '0 0 24 24');
-    icon.setAttribute('aria-hidden', 'true');
-    const drawing = document.createElementNS(svgNamespace, 'use');
-    drawing.setAttribute('href', `#scene-icon-${scene.icon || scene.kind}`);
-    icon.append(drawing);
-    button.append(icon);
     button.addEventListener('click', () => showScene(index));
     return button;
   });
@@ -359,10 +382,8 @@ function renderVideoGallery(scenes) {
   const panel = gallery.querySelector('#video-comparison');
   const primary = panel.querySelector('.video-primary');
   const baselines = panel.querySelector('.video-baselines');
-  let stopPlayback;
-
   bindSceneSwitcher(gallery, panel, examples, scene => {
-    stopPlayback?.();
+    comparisonTimeline?.dispose();
     panel.querySelector('.prompt').textContent = `“${scene.prompt}”`;
     const entries = comparisonEntries(scene);
     const primaryTiles = [];
@@ -373,7 +394,8 @@ function renderVideoGallery(scenes) {
     }
     primary.replaceChildren(...primaryTiles);
     baselines.replaceChildren(...baselineTiles);
-    stopPlayback = bindComparisonTimeline(panel, [...panel.querySelectorAll('video')], scene.keyframe);
+    comparisonTimeline = bindComparisonTimeline(panel, [...panel.querySelectorAll('video')], scene.keyframe);
+    if (comparisonInView) comparisonTimeline?.setVisible(true);
   });
 }
 
@@ -398,6 +420,65 @@ function renderImageGallery(scenes) {
 }
 
 const methodVideo = document.querySelector('#method-video');
+const siteHeader = document.querySelector('.site-header');
+const heroShowcase = document.querySelector('.hero-showcase');
+const showcaseEnd = document.querySelector('.hero-overview');
+const showcaseToggle = heroShowcase.querySelector('.hero-toggle');
+const showcaseFigure = heroShowcase.querySelector('#hero-comparison');
+const comparisonGrid = document.querySelector('#comparison-videos');
+let contentPlayback;
+let comparisonTimeline;
+let comparisonInView = false;
+let methodInView = false;
+let showcaseExpanded = true;
+
+function updateShowcaseToggle() {
+  const showOnlyArrow = !showcaseExpanded && showcaseEnd.getBoundingClientRect().top <= siteHeader.offsetHeight + 1;
+  showcaseToggle.hidden = !showcaseExpanded && !showOnlyArrow;
+  showcaseFigure.inert = showOnlyArrow;
+}
+
+function updatePinnedLayout() {
+  const headerHeight = siteHeader.offsetHeight;
+  const showcaseHeight = heroShowcase.offsetHeight;
+  const handleHeight = parseFloat(getComputedStyle(showcaseToggle).height);
+  const showcaseInset = showcaseExpanded ? showcaseHeight + handleHeight / 2 : handleHeight;
+  document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+  document.documentElement.style.setProperty('--showcase-height', `${showcaseHeight}px`);
+  document.documentElement.style.setProperty('--showcase-inset', `${showcaseInset}px`);
+  updateShowcaseToggle();
+  contentPlayback?.disconnect();
+  contentPlayback = observeViewportVisibility(headerHeight + showcaseInset, 0.25, (target, visible) => {
+    if (target === methodVideo && methodInView !== visible) {
+      methodInView = visible;
+      setVideoPlayback(methodVideo, visible);
+    }
+    if (target === comparisonGrid && comparisonInView !== visible) {
+      comparisonInView = visible;
+      comparisonTimeline?.setVisible(visible);
+    }
+  });
+  contentPlayback.observe(methodVideo);
+  contentPlayback.observe(comparisonGrid);
+}
+
+showcaseToggle.addEventListener('click', () => {
+  showcaseExpanded = !showcaseExpanded;
+  showcaseToggle.setAttribute('aria-expanded', String(showcaseExpanded));
+  const action = showcaseExpanded ? 'Collapse' : 'Expand';
+  showcaseToggle.title = `${action} floating video showcase`;
+  showcaseToggle.setAttribute('aria-label', showcaseToggle.title);
+  if (!showcaseExpanded) {
+    const remaining = Math.ceil(showcaseEnd.getBoundingClientRect().top - siteHeader.offsetHeight);
+    if (remaining > 0) window.scrollBy(0, remaining);
+  }
+  updatePinnedLayout();
+});
+window.addEventListener('scroll', updateShowcaseToggle, { passive: true });
+const pinnedLayout = new ResizeObserver(updatePinnedLayout);
+pinnedLayout.observe(siteHeader);
+pinnedLayout.observe(heroShowcase);
+
 const chapterButtons = [...document.querySelectorAll('.method-chapters button')];
 let pendingChapter = null;
 
@@ -442,14 +523,3 @@ const videoScenes = selectedVideos.length ? selectedVideos : scenes;
 renderShowcase(window.autoCacheShowcase ?? []);
 renderVideoGallery(videoScenes);
 renderImageGallery(scenes);
-
-const heroDescription = document.querySelector('.hero-description');
-const benchmarkScope = document.querySelector('.benchmark-scope');
-const heroDescriptionText = document.createRange();
-heroDescriptionText.selectNodeContents(heroDescription);
-
-new ResizeObserver(() => {
-  const lineWidths = Array.from(heroDescriptionText.getClientRects(), line => line.width);
-  const widestLine = Math.max(...lineWidths);
-  if (widestLine > 0) benchmarkScope.style.width = `${widestLine}px`;
-}).observe(heroDescription);
