@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="AutoCache uses an LLM agent to discover caching policies for image and video generation. Explore matched results and measured speedups.">
   <title>AutoCache: Agent-Designed Caching for Image and Video Generation</title>
-  <link rel="stylesheet" href="site.css?v=button-tone-all">
+  <link rel="stylesheet" href="site.css?v=analysis-spacing">
   <script src="assets/media/manifest.js" defer></script>
   <script src="assets/media/showcase.js" defer></script>
   <script src="app.js?v=showcase-open" defer></script>
@@ -161,7 +161,7 @@
             <span style="--swatch: #47c1a3">DiCache (ICLR 2026)</span>
             <span style="--swatch: #e76f51">AutoCache (Ours)</span>
           </div>
-          <p class="result-note">AutoCache improves PSNR, SSIM, and LPIPS over the plotted baselines on all three backbones. The radar plots show the best result for each metric across the selected policies, with speedups of <strong>3.38× on Qwen, 2.58× on FLUX3, and 2.45× on Wan2.1</strong>. The Qwen development-set curve pairs speed and PSNR for each policy and shows higher fidelity than SeaCache at comparable speedups.</p>
+          <p class="result-note">AutoCache Single outperforms the reported caching baselines on PSNR, SSIM, and LPIPS across all three backbones. On Qwen-Image-2.1, it improves PSNR from 25.60 to <strong>29.43 dB</strong> and reduces latency from 2.95 to 2.81 s per image compared with MagCache, the fastest baseline. Compared with SeaCache, AutoCache raises PSNR from 31.92 to <strong>32.80 dB</strong> on FLUX3 and from 24.47 to <strong>25.51 dB</strong> on Wan2.1. On Wan2.1, speedup also increases from 2.15× to 2.41×. The radar plots report the best result for each metric across selected policies, with maximum speedups of 3.38× on Qwen, 2.58× on FLUX3, and 2.45× on Wan2.1.</p>
         </figcaption>
       </figure>
       <section class="evaluation-setup" aria-labelledby="benchmark-scope-title">
@@ -178,7 +178,6 @@
             </tbody>
           </table>
         </div>
-        <p class="result-note">Split sizes count prompts. Policies are selected on the development set and frozen before held-out testing. Reference fidelity uses uncached outputs generated with the same prompts and seeds.</p>
       </section>
     </section>
 
@@ -216,7 +215,7 @@
             </table>
           </div>
         </div>
-        <p class="result-note">The frozen FLUX3 policy achieves the highest reference fidelity on FLUX.1-dev at <strong>1.96×</strong> speedup. On GenEval 2, the frozen Qwen policy leads on fidelity and speedup at <strong>3.02×</strong>. Both transfer without a new search.</p>
+        <p class="result-note">The frozen FLUX3 policy transfers from FLUX3-Image-Klein-Base (5.6B, 1024 × 1024) to FLUX.1-dev (12B, 256 × 256). On 170 DrawBench prompts, it achieves the highest reference fidelity across PSNR, SSIM, and LPIPS, reaching <strong>31.64 dB PSNR at 1.96×</strong> speedup. SeaCache has the highest speedup among the 50-step methods at 2.28×. The Qwen policy discovered on DrawBench is applied unchanged to 800 GenEval 2 prompts. On matched prompt–seed pairs, it outperforms DiCache and SeaCache on all three fidelity metrics and speedup, reaching <strong>27.50 dB PSNR at 3.02×</strong>. Both transfers use the frozen policy programs without a new search.</p>
       </div>
     </section>
   </main>

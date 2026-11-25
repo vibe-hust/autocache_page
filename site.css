@@ -87,6 +87,7 @@ nav a:hover { color: var(--header-ink); text-decoration: underline; text-underli
 .abstract-copy { max-width: 74ch; margin: clamp(14px, 2vw, 22px) auto 0; line-height: 1.72; }
 .method-lead { width: 100%; margin: 14px 0 0; color: var(--muted); font-size: 1rem; line-height: 1.65; }
 .result-note { margin-top: 12px; color: var(--muted); font-size: .9rem; line-height: 1.6; }
+#figure1-caption .result-note, .transfer .result-note { margin-top: calc(12px + 1lh); }
 .result-note strong { color: var(--blue); }
 .section { padding-top: clamp(48px, 7vw, 88px); }
 #top { scroll-margin-top: var(--header-height); }
