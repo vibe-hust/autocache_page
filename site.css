@@ -114,6 +114,7 @@ h2 { font-size: clamp(1.7rem, 3.7vw, 2.45rem); line-height: 1.13; letter-spacing
 .scene-switcher button[aria-pressed="true"]::before { width: 14px; height: 14px; }
 #video-comparison :is(.prompt, .video-status) { margin-inline: clamp(12px, 2vw, 32px); }
 :is(#video-comparison, #image-comparison) .prompt { margin-bottom: 14px; text-align: center; }
+#images > .media-shell { width: 75%; max-width: none; }
 .image-heading { width: fit-content; max-width: 100%; margin-inline: auto; }
 .image-zoom-hint { margin-top: 4px; color: var(--blue); font-size: 1.05rem; line-height: 1.45; text-align: center; }
 .image-zoom-hint .magnifier-icon { display: inline-block; position: relative; width: 28px; height: 28px; vertical-align: middle; }
