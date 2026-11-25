@@ -442,3 +442,14 @@ const videoScenes = selectedVideos.length ? selectedVideos : scenes;
 renderShowcase(window.autoCacheShowcase ?? []);
 renderVideoGallery(videoScenes);
 renderImageGallery(scenes);
+
+const heroDescription = document.querySelector('.hero-description');
+const benchmarkScope = document.querySelector('.benchmark-scope');
+const heroDescriptionText = document.createRange();
+heroDescriptionText.selectNodeContents(heroDescription);
+
+new ResizeObserver(() => {
+  const lineWidths = Array.from(heroDescriptionText.getClientRects(), line => line.width);
+  const widestLine = Math.max(...lineWidths);
+  if (widestLine > 0) benchmarkScope.style.width = `${widestLine}px`;
+}).observe(heroDescription);

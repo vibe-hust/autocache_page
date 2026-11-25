@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="AutoCache uses an LLM agent to discover caching policies for image and video generation. Explore matched results and measured speedups.">
   <title>AutoCache: Agent-Designed Caching for Image and Video Generation</title>
-  <link rel="stylesheet" href="site.css">
+  <link rel="stylesheet" href="site.css?v=hero-overview">
   <script src="assets/media/manifest.js" defer></script>
   <script src="assets/media/showcase.js" defer></script>
-  <script src="app.js" defer></script>
+  <script src="app.js?v=hero-overview" defer></script>
   <link rel="stylesheet" href="./project-meta.css">
   <link rel="canonical" href="https://vibe-hust.github.io/autocache_page/">
 </head>
@@ -29,7 +29,7 @@
       <header class="media-shell hero-heading">
         <h1 class="project-title" id="title">AutoCache: Agent-Designed Caching for Image and Video Generation</h1>
         <div class="project-meta"><p class="project-authors"><a href="https://github.com/shuiiiiyu">Canyu Shen</a><sup>1</sup> · <a href="https://github.com/cheyan9">Yang Chen</a><sup>2</sup> · <a href="https://github.com/TetuDegit">Gezhi Zhu</a><sup>2</sup> · <a href="https://www.cwi.nl/en/people/xuemei-zhou/">Xuemei Zhou</a><sup>3</sup> · <a href="https://tenglon.github.io/">Teng Long</a><sup>4</sup> · <a href="https://taohu.me/">Vincent Tao Hu</a><sup>2</sup></p><p class="project-affiliations"><sup>1</sup>Tongji University · <sup>2</sup>Huazhong University of Science and Technology<br><sup>3</sup>Centrum voor Wiskunde en Informatica (CWI) · <sup>4</sup>University of Trento</p><p class="project-links"><a href="https://github.com/vibe-hust/autocache_code">Code</a><a href="https://github.com/vibe-hust">VibeLab</a></p></div>
-        <div class="text-panel hero-summary">
+        <div class="hero-overview">
           <p class="hero-description">AutoCache speeds up diffusion inference by reusing computation across denoising steps.</p>
           <ul class="hero-results" aria-label="AutoCache Single speedups">
             <li><strong>3.14×</strong> Qwen-Image-2.1</li>
@@ -37,6 +37,29 @@
             <li><strong>2.41×</strong> Wan2.1-T2V-1.3B</li>
           </ul>
           <p class="hero-baseline">Speedup relative to uncached inference</p>
+          <section class="benchmark-scope" aria-labelledby="benchmark-scope-title">
+            <h2 id="benchmark-scope-title">Backbones and benchmarks</h2>
+            <div class="method-scope">
+              <div class="method-scope-item">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#scene-icon-image"></use></svg>
+                <div>
+                  <h3>Image generation</h3>
+                  <p><strong>Qwen-Image-2.1</strong> and <strong>FLUX3-Image-Klein-Base</strong></p>
+                  <p>DrawBench</p>
+                  <p>GenEval 2 · Qwen policy transfer</p>
+                  <p>DrawBench · FLUX3 policy transfer to <strong>FLUX.1-dev</strong></p>
+                </div>
+              </div>
+              <div class="method-scope-item">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#scene-icon-video"></use></svg>
+                <div>
+                  <h3>Video generation</h3>
+                  <p><strong>Wan2.1-T2V-1.3B</strong></p>
+                  <p>VBench</p>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </header>
       <div class="hero-showcase">
@@ -57,7 +80,7 @@
     </section>
 
     <section class="media-shell section" id="method" aria-labelledby="method-heading">
-      <h2 id="method-heading">How the agent searches</h2>
+      <h2 id="method-heading">Method</h2>
       <p class="method-lead">Given observations about the sampling state and cache history, an agent writes a signal extractor and an updater. It evaluates candidate policies on a development set and freezes the selected policies. At inference, <strong>NEW</strong> reruns the backbone blocks and updates the cached residual. <strong>REUSE</strong> skips those blocks and adds the cached residual to the current features. The backbone stays frozen, and inference requires no LLM calls.</p>
       <figure class="method-walkthrough" id="method-walkthrough">
         <div class="method-chapters" role="group" aria-label="Animation chapters">
@@ -73,29 +96,6 @@
           <a href="assets/media/method-walkthrough.mp4">Download the method animation</a>
         </video>
       </figure>
-      <div class="method-evaluation">
-        <h3 class="method-scope-title">Backbones and benchmarks</h3>
-        <div class="method-scope">
-          <div class="method-scope-item">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#scene-icon-image"></use></svg>
-            <div>
-              <h4>Image generation</h4>
-              <p><strong>Qwen-Image-2.1</strong> and <strong>FLUX3-Image-Klein-Base</strong></p>
-              <p>DrawBench</p>
-              <p>GenEval 2 · Qwen policy transfer</p>
-              <p>DrawBench · FLUX3 policy transfer to <strong>FLUX.1-dev</strong></p>
-            </div>
-          </div>
-          <div class="method-scope-item">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#scene-icon-video"></use></svg>
-            <div>
-              <h4>Video generation</h4>
-              <p><strong>Wan2.1-T2V-1.3B</strong></p>
-              <p>VBench</p>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
 
     <section class="section comparison-section" id="videos" aria-labelledby="videos-heading">
