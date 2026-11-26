@@ -62,18 +62,18 @@
       <figure class="method-walkthrough" id="method-walkthrough">
         <div class="method-chapters" role="group" aria-label="Animation chapters">
           <button type="button" data-start="0" aria-controls="method-video" aria-current="true">Speedup</button>
-          <button type="button" data-start="17.5" aria-controls="method-video">What the agent sees</button>
-          <button type="button" data-start="25.3" aria-controls="method-video">What the agent changes</button>
-          <button type="button" data-start="43.8" aria-controls="method-video">Generation steps</button>
-          <button type="button" data-start="80" aria-controls="method-video">Search round</button>
-          <button type="button" data-start="90.9" aria-controls="method-video">Test the rules</button>
-          <button type="button" data-start="102.5" aria-controls="method-video">Overview</button>
+          <button type="button" data-start="15.25" aria-controls="method-video">Generation steps</button>
+          <button type="button" data-start="25.6" aria-controls="method-video">What the agent sees</button>
+          <button type="button" data-start="43.35" aria-controls="method-video">What the agent changes</button>
+          <button type="button" data-start="69.2" aria-controls="method-video">Search round</button>
+          <button type="button" data-start="80.1" aria-controls="method-video">Test the rules</button>
+          <button type="button" data-start="91.7" aria-controls="method-video">Overview</button>
         </div>
         <video id="method-video" controls muted playsinline preload="metadata" width="1920" height="1080"
           poster="assets/paper/method.webp" aria-label="AutoCache method animation"
           aria-describedby="race-caption">
-          <source src="assets/media/method-walkthrough.mp4?v=smooth-zoom" type="video/mp4">
-          <a href="assets/media/method-walkthrough.mp4?v=smooth-zoom">Download the method animation</a>
+          <source src="assets/media/method-walkthrough.mp4?v=search-flow" type="video/mp4">
+          <a href="assets/media/method-walkthrough.mp4?v=search-flow">Download the method animation</a>
         </video>
         <figcaption class="result-note" id="race-caption">The animation compares two 40-step generation runs. In the held-out DrawBench test, Qwen-Image-2.1 averages <strong>2.81 s per image with AutoCache, down from 8.82 s</strong> without caching (H100, batch size one).</figcaption>
       </figure>
