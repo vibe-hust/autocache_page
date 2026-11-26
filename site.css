@@ -219,3 +219,104 @@ h2 { font-size: clamp(1.7rem, 3.7vw, 2.45rem); line-height: 1.13; letter-spacing
 @media (max-width: 800px) {
   .citation-section.media-shell { width: calc(100% - 32px); }
 }
+
+/* Balanced typography scale and comfortable reading widths across desktop and mobile. */
+body {
+  font-size: 1rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+.media-shell { width: min(1040px, calc(100% - 48px)); }
+#videos > .media-shell { width: min(1360px, calc(100% - 48px)); }
+#images > .media-shell { width: min(1160px, calc(100% - 48px)); }
+nav a { font-size: .875rem; font-weight: 560; letter-spacing: -.005em; }
+.hero-header { padding: clamp(28px, 3.6vw, 48px) 0 clamp(26px, 3.4vw, 44px); }
+.project-title {
+  max-width: 34ch;
+  font-size: clamp(1.65rem, 3vw, 2.5rem);
+  font-weight: 650;
+  line-height: 1.18;
+  letter-spacing: -.03em;
+}
+.hero-heading .project-meta { margin: 1.15rem 0 0; }
+.hero-heading .project-meta .project-authors {
+  margin: 0 0 .45rem;
+  font-size: .975rem;
+  line-height: 1.65;
+  color: #eceef2;
+}
+.hero-heading .project-meta .project-affiliations {
+  margin: 0;
+  font-size: .875rem;
+  line-height: 1.6;
+  color: var(--header-muted);
+}
+.hero-heading .project-meta .project-links { margin: 1rem 0 0; }
+.project-meta .project-links a { min-height: 36px; padding: 6px 14px; font-size: .875rem; font-weight: 600; }
+.method-chapters button, .comparison-zoom { min-height: 35px; padding: 5px 12px; font-size: .84rem; font-weight: 600; }
+.play { min-height: 36px; font-size: .85rem; font-weight: 600; }
+h2 {
+  font-size: clamp(1.4rem, 2.25vw, 1.85rem);
+  font-weight: 650;
+  line-height: 1.24;
+  letter-spacing: -.028em;
+}
+h3 {
+  font-size: clamp(1.05rem, 1.4vw, 1.18rem);
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: -.015em;
+}
+.section { padding-top: clamp(44px, 5.5vw, 72px); }
+#method { padding-top: clamp(40px, 5vw, 64px); }
+.abstract-copy {
+  max-width: 66ch;
+  margin: clamp(14px, 1.8vw, 20px) auto 0;
+  font-size: 1.03125rem;
+  line-height: 1.75;
+  color: #2b303a;
+}
+.abstract-copy strong { color: var(--ink); font-weight: 650; }
+.method-summary {
+  max-width: 66ch;
+  margin: clamp(16px, 2vw, 22px) auto 0;
+  padding-left: 1.35rem;
+  font-size: 1rem;
+  line-height: 1.72;
+}
+.hero-results { font-size: .9375rem; color: var(--muted); }
+.hero-results strong {
+  font-size: clamp(1.55rem, 2.3vw, 2.05rem);
+  font-weight: 700;
+  letter-spacing: -.03em;
+  line-height: 1.15;
+  margin-bottom: 4px;
+}
+.hero-baseline { margin-top: 12px; font-size: .84rem; line-height: 1.5; }
+.result-note { font-size: .9375rem; line-height: 1.68; }
+.result-details { font-size: .925rem; line-height: 1.68; }
+.prompt, .case-note { font-size: .9375rem; line-height: 1.55; }
+.scene-focus { font-size: .925rem; line-height: 1.5; }
+.chart-key { font-size: .875rem; }
+.transfer-table table { font-size: .89rem; line-height: 1.45; }
+.transfer-table caption { font-size: 1rem; font-weight: 650; }
+.transfer-table caption span { font-size: .86rem; font-weight: 450; }
+.transfer-table th, .transfer-table td { padding: 9px clamp(6px, .6vw, 10px); }
+.citation-card { max-width: 56rem; }
+.bibtex-code { font-size: .8125rem; line-height: 1.65; }
+@media (max-width: 800px) {
+  .media-shell, :is(#videos, #images) > .media-shell { width: calc(100% - 32px); }
+}
+@media (max-width: 620px) {
+  nav a { font-size: .8125rem; }
+  .project-title { font-size: clamp(1.45rem, 6.2vw, 1.85rem); }
+  .hero-heading .project-meta .project-authors { font-size: .9rem; }
+  .hero-heading .project-meta .project-affiliations { font-size: .8125rem; }
+  .abstract-copy, .method-summary { font-size: .95rem; }
+  h2 { font-size: 1.35rem; }
+  .hero-results { font-size: .82rem; }
+  .hero-results strong { font-size: 1.35rem; }
+  .transfer-table table { min-width: 0; font-size: .78rem; }
+  .transfer-table th, .transfer-table td { padding: 7px 4px; }
+}
