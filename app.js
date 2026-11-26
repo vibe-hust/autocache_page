@@ -421,34 +421,16 @@ function renderImageGallery(scenes) {
 
 const methodVideo = document.querySelector('#method-video');
 const siteHeader = document.querySelector('.site-header');
-const heroShowcase = document.querySelector('.hero-showcase');
-const showcaseEnd = document.querySelector('.hero-overview');
-const showcaseToggle = heroShowcase.querySelector('.hero-toggle');
-const showcaseFigure = heroShowcase.querySelector('#hero-comparison');
 const comparisonGrid = document.querySelector('#comparison-videos');
 let contentPlayback;
 let comparisonTimeline;
 let comparisonInView = false;
 let methodInView = false;
-let showcaseExpanded = true;
-
-function updateShowcaseToggle() {
-  const showOnlyArrow = !showcaseExpanded && showcaseEnd.getBoundingClientRect().top <= siteHeader.offsetHeight + 1;
-  showcaseToggle.hidden = !showcaseExpanded && !showOnlyArrow;
-  showcaseFigure.inert = showOnlyArrow;
-}
-
-function updatePinnedLayout() {
+function updateViewportLayout() {
   const headerHeight = siteHeader.offsetHeight;
-  const showcaseHeight = heroShowcase.offsetHeight;
-  const handleHeight = parseFloat(getComputedStyle(showcaseToggle).height);
-  const showcaseInset = showcaseExpanded ? showcaseHeight + handleHeight / 2 : handleHeight;
   document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
-  document.documentElement.style.setProperty('--showcase-height', `${showcaseHeight}px`);
-  document.documentElement.style.setProperty('--showcase-inset', `${showcaseInset}px`);
-  updateShowcaseToggle();
   contentPlayback?.disconnect();
-  contentPlayback = observeViewportVisibility(headerHeight + showcaseInset, 0.25, (target, visible) => {
+  contentPlayback = observeViewportVisibility(headerHeight, 0.25, (target, visible) => {
     if (target === methodVideo && methodInView !== visible) {
       methodInView = visible;
       setVideoPlayback(methodVideo, visible);
@@ -462,22 +444,8 @@ function updatePinnedLayout() {
   contentPlayback.observe(comparisonGrid);
 }
 
-showcaseToggle.addEventListener('click', () => {
-  showcaseExpanded = !showcaseExpanded;
-  showcaseToggle.setAttribute('aria-expanded', String(showcaseExpanded));
-  const action = showcaseExpanded ? 'Collapse' : 'Expand';
-  showcaseToggle.title = `${action} floating video showcase`;
-  showcaseToggle.setAttribute('aria-label', showcaseToggle.title);
-  if (!showcaseExpanded) {
-    const remaining = Math.ceil(showcaseEnd.getBoundingClientRect().top - siteHeader.offsetHeight);
-    if (remaining > 0) window.scrollBy(0, remaining);
-  }
-  updatePinnedLayout();
-});
-window.addEventListener('scroll', updateShowcaseToggle, { passive: true });
-const pinnedLayout = new ResizeObserver(updatePinnedLayout);
-pinnedLayout.observe(siteHeader);
-pinnedLayout.observe(heroShowcase);
+const headerLayout = new ResizeObserver(updateViewportLayout);
+headerLayout.observe(siteHeader);
 
 const chapterButtons = [...document.querySelectorAll('.method-chapters button')];
 let pendingChapter = null;
