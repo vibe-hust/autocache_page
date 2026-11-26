@@ -4,6 +4,7 @@ window.autoCacheMedia = [
     "id": "vbench_0665",
     "kind": "video",
     "title": "Astronaut near Earth",
+    "videoDetail": { "time": 4.5, "label": "Helmet and upper suit", "box": [64, 120, 312, 180] },
     "icon": "helmet",
     "keyframe": {
       "time": 4.5,
@@ -21,7 +22,7 @@ window.autoCacheMedia = [
         "image": "assets/paper/astronaut/original.webp"
       },
       "autocache": {
-        "label": "Ours",
+        "label": "AutoCache",
         "video": "assets/media/selected-five/r07_s04/vbench_0665/autocache.mp4",
         "speedup": 2.16884428036135,
         "image": "assets/paper/astronaut/autocache.webp"
@@ -50,6 +51,7 @@ window.autoCacheMedia = [
     "id": "vbench_0560",
     "kind": "video",
     "title": "Couple in the rain",
+    "videoDetail": { "time": 4.5, "label": "Umbrella and couple", "box": [224, 16, 312, 180] },
     "icon": "umbrella",
     "keyframe": {
       "time": 3.25,
@@ -66,7 +68,7 @@ window.autoCacheMedia = [
         "speedup": 1.0
       },
       "autocache": {
-        "label": "Ours",
+        "label": "AutoCache",
         "video": "assets/media/selected-five/r09_s02/vbench_0560/autocache.mp4",
         "speedup": 2.255290029757953
       },
@@ -91,6 +93,7 @@ window.autoCacheMedia = [
     "id": "vbench_0938",
     "kind": "video",
     "title": "Skier on the slope",
+    "videoDetail": { "time": 1.5, "label": "Skier’s jacket and gloves", "box": [288, 240, 312, 180] },
     "icon": "skier",
     "keyframe": {
       "time": 3.25,
@@ -108,7 +111,7 @@ window.autoCacheMedia = [
         "image": "assets/paper/skier/original.webp"
       },
       "autocache": {
-        "label": "Ours",
+        "label": "AutoCache",
         "video": "assets/media/selected-five/r07_s04/vbench_0938/autocache.mp4",
         "speedup": 2.1686126035615425,
         "image": "assets/paper/skier/autocache.webp"
@@ -137,6 +140,7 @@ window.autoCacheMedia = [
     "id": "vbench_0833",
     "kind": "video",
     "title": "Music studio",
+    "videoDetail": { "time": 3.25, "label": "Keyboard and display", "box": [416, 288, 312, 180] },
     "icon": "music",
     "keyframe": {
       "time": 3.25,
@@ -153,7 +157,7 @@ window.autoCacheMedia = [
         "speedup": 1.0
       },
       "autocache": {
-        "label": "Ours",
+        "label": "AutoCache",
         "video": "assets/media/selected-five/r07_s04/vbench_0833/autocache.mp4",
         "speedup": 2.0763842934582653
       },
@@ -178,6 +182,7 @@ window.autoCacheMedia = [
     "id": "vbench_0147",
     "kind": "video",
     "title": "Oven and scissors",
+    "videoDetail": { "time": 2.75, "label": "Hand and scissors", "box": [0, 48, 312, 180] },
     "icon": "oven",
     "keyframe": {
       "time": 3.25,
@@ -194,7 +199,7 @@ window.autoCacheMedia = [
         "speedup": 1.0
       },
       "autocache": {
-        "label": "Ours",
+        "label": "AutoCache",
         "video": "assets/media/selected-five/r07_s04/vbench_0147/autocache.mp4",
         "speedup": 2.0768222931875
       },
@@ -238,7 +243,7 @@ window.autoCacheMedia = [
         "image": "assets/media/selected-three/r09_s03/drawbench_0195/original.png"
       },
       "autocache": {
-        "label": "Ours",
+        "label": "AutoCache",
         "image": "assets/media/selected-three/r09_s03/drawbench_0195/autocache.png"
       },
       "teacache": {
@@ -278,7 +283,7 @@ window.autoCacheMedia = [
         "image": "assets/media/selected-three/r08_s02/drawbench_0004/original.png"
       },
       "autocache": {
-        "label": "Ours",
+        "label": "AutoCache",
         "image": "assets/media/selected-three/r08_s02/drawbench_0004/autocache.png"
       },
       "teacache": {
@@ -318,7 +323,7 @@ window.autoCacheMedia = [
         "image": "assets/media/selected-three/r09_s03/drawbench_0107/original.png"
       },
       "autocache": {
-        "label": "Ours",
+        "label": "AutoCache",
         "image": "assets/media/selected-three/r09_s03/drawbench_0107/autocache.png"
       },
       "teacache": {

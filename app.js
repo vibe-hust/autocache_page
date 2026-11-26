@@ -1,6 +1,6 @@
 const methods = [
-  ['original', 'Original'], ['autocache', 'Ours'], ['teacache', 'TeaCache'],
-  ['dicache', 'DiCache'], ['seacache', 'SeaCache'],
+  ['original', 'Original'], ['autocache', 'AutoCache'], ['teacache', 'TeaCache', 'CVPR 2025'],
+  ['dicache', 'DiCache', 'ICLR 2026'], ['seacache', 'SeaCache', 'CVPR 2026'],
 ];
 
 const imageFocus = {
@@ -37,67 +37,32 @@ const paperCases = [
 const tileTemplate = document.querySelector('#tile-template');
 
 function paperSources(scene) {
-  return Object.fromEntries(methods.map(([key]) => {
-    const path = `assets/paper/${scene.id}/${key}`;
-    return [key, {
-      image: `${path}.webp`,
-      detail: scene.hotspot ? `${path}-detail.webp` : undefined,
-    }];
-  }));
+  return Object.fromEntries(methods.map(([key]) => [key, {
+    image: `assets/paper/${scene.id}/${key}.webp`,
+  }]));
 }
 
-function makeHotspot(hotspot, source, method) {
-  const marker = document.createElement('button');
-  marker.className = 'hotspot';
-  marker.type = 'button';
-  const [left, top, width, height] = hotspot.box;
-  const centerX = left + width / 2;
-  const centerY = top + height / 2;
-  marker.style.setProperty('--spot-x', `${centerX}%`);
-  marker.style.setProperty('--spot-y', `${centerY}%`);
-
-  const crop = new Image();
-  crop.alt = '';
-  if (!source.detail) {
-    crop.style.transformOrigin = `${centerX}% ${centerY}%`;
-    crop.style.transform = `translate(${50 - centerX}%, ${50 - centerY}%) scale(${100 / Math.min(width, height)})`;
-  }
-  const icon = document.createElement('span');
-  icon.setAttribute('aria-hidden', 'true');
-  marker.append(crop, icon);
-
-  function setExpanded(expanded) {
-    marker.setAttribute('aria-expanded', String(expanded));
-    const action = expanded ? 'Restore full image' : `Magnify ${hotspot.label.toLowerCase()}`;
-    marker.setAttribute('aria-label', `${action} · ${method}`);
-    icon.textContent = expanded ? '×' : '';
-    crop.hidden = !expanded;
-    if (expanded && !crop.hasAttribute('src')) crop.src = source.detail ?? source.image;
-  }
-
-  setExpanded(false);
-  marker.addEventListener('click', () => setExpanded(crop.hidden));
-  marker.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && !crop.hidden) setExpanded(false);
-  });
-  return marker;
-}
-
-function makeTile(name, source, scene) {
+function makeTile(scene, [key, name, source, venue], zoomed = false) {
   const tile = tileTemplate.content.firstElementChild.cloneNode(true);
   const visual = tile.querySelector('.visual');
   const label = source.label ?? name;
-  tile.querySelector('.method-name').textContent = label;
-
+  const difference = `assets/differences/${scene.id}/${key}`;
+  const reference = key === 'original';
+  const caption = tile.querySelector('.method-name');
+  caption.textContent = label;
+  if (venue) {
+    const conference = document.createElement('small');
+    conference.textContent = venue;
+    caption.append(conference);
+  }
   if (source.video) {
     const video = document.createElement('video');
-    video.src = source.video;
-    if (source.image) video.poster = source.image;
+    video.src = `${difference}${zoomed ? '-detail' : ''}.mp4`;
     video.preload = 'metadata';
     video.controls = true;
     video.muted = true;
     video.playsInline = true;
-    video.setAttribute('aria-label', `${scene.title} · ${label}`);
+    video.setAttribute('aria-label', `${scene.title} · ${label} with difference map underneath`);
     visual.append(video);
   } else {
     const image = new Image();
@@ -105,47 +70,22 @@ function makeTile(name, source, scene) {
     image.alt = `${scene.title} · ${label}`;
     image.loading = 'lazy';
     visual.append(image);
-    if (scene.hotspot) visual.append(makeHotspot(scene.hotspot, source, label));
+    const map = document.createElement('div');
+    map.className = 'difference-map';
+    if (reference) {
+      map.classList.add('reference-map');
+      map.setAttribute('role', 'img');
+      map.setAttribute('aria-label', 'Original compared with itself: zero difference');
+    } else {
+      const heatmap = new Image();
+      heatmap.src = `${difference}.webp`;
+      heatmap.alt = `${scene.title} · ${label} pixel difference from Original`;
+      heatmap.loading = 'lazy';
+      map.append(heatmap);
+    }
+    tile.append(map);
   }
   return tile;
-}
-
-function bindPlayback(article) {
-  const videos = [...article.querySelectorAll('video')];
-  const button = article.querySelector('.play');
-  const status = article.querySelector('.video-status');
-  button.hidden = videos.length < 2;
-  button.onclick = null;
-  status.hidden = true;
-  if (videos.length < 2) return;
-
-  const updateButton = () => {
-    if (!article.contains(videos[0])) return;
-    const playing = videos.some(video => !video.paused && !video.ended);
-    button.textContent = playing ? 'Pause all' : 'Play together';
-  };
-  updateButton();
-  for (const video of videos) {
-    for (const event of ['play', 'pause', 'ended']) video.addEventListener(event, updateButton);
-  }
-  button.onclick = async () => {
-    status.hidden = true;
-    if (videos.some(video => !video.paused && !video.ended)) {
-      videos.forEach(video => video.pause());
-      return;
-    }
-    const first = videos[0];
-    const start = first.ended ? 0 : first.currentTime;
-    const results = await Promise.allSettled(videos.map(video => {
-      video.currentTime = start;
-      return video.play();
-    }));
-    if (article.contains(first) && results.some(result => result.status === 'rejected' && result.reason.name !== 'AbortError')) {
-      videos.forEach(video => video.pause());
-      status.textContent = 'A clip could not be played. Check the media file or try the individual controls.';
-      status.hidden = false;
-    }
-  };
 }
 
 function observeViewportVisibility(topInset, threshold, onVisibilityChange) {
@@ -161,30 +101,8 @@ function setVideoPlayback(video, visible) {
   else video.pause();
 }
 
-const showcasePlayback = observeViewportVisibility(55, 0.5, setVideoPlayback);
-
-function renderShowcase(scenes) {
-  const hero = document.querySelector('#hero-comparison');
-  const panels = hero.querySelector('.hero-panels');
-  const pair = methods.filter(([key]) => key === 'original' || key === 'autocache');
-  const slides = scenes.filter(scene => scene.kind === 'video' && pair.every(([key]) => {
-    const source = scene.methods[key];
-    return source?.video || source?.image;
-  }));
-  bindSceneSwitcher(hero, hero, slides, scene => {
-    for (const video of panels.querySelectorAll('video')) {
-      showcasePlayback.unobserve(video);
-      video.pause();
-    }
-    panels.replaceChildren(...pair.map(([key, name]) => makeTile(name, scene.methods[key], scene)));
-    hero.querySelector('.prompt').textContent = scene.prompt;
-    bindPlayback(hero);
-    for (const video of panels.querySelectorAll('video')) showcasePlayback.observe(video);
-  });
-}
-
 function comparisonEntries(scene) {
-  return methods.map(([key, name]) => [key, name, scene.methods[key]])
+  return methods.map(([key, name, venue]) => [key, name, scene.methods[key], venue])
     .filter(([, , source]) => source?.image || source?.video);
 }
 
@@ -193,15 +111,12 @@ function formatVideoTime(seconds) {
   return `${Math.floor(ticks / 6000)}:${((ticks % 6000) / 100).toFixed(2).padStart(5, '0')}`;
 }
 
-function bindComparisonTimeline(panel, videos, keyframe) {
+function bindComparisonTimeline(panel, videos, { startTime = 0, autoplay = false, loop = false } = {}) {
   const controls = panel.querySelector('.video-controls');
   const status = panel.querySelector('.video-status');
-  const keyframeJump = panel.querySelector('.keyframe-jump');
-  const keyframeHint = panel.querySelector('.video-keyframe-hint');
   const [leader] = videos;
   controls.hidden = !leader;
   status.hidden = true;
-  keyframeJump.hidden = keyframeHint.hidden = true;
   if (!leader) return undefined;
 
   const button = panel.querySelector('.play');
@@ -213,16 +128,8 @@ function bindComparisonTimeline(panel, videos, keyframe) {
   let duration = 0;
   let playing = false;
   let request = 0;
-  let autoplayPending = false;
-
-  if (keyframe) {
-    const timestamp = `${keyframe.time.toFixed(2)} s`;
-    keyframeJump.setAttribute('aria-label', `Jump all comparison videos to ${timestamp}`);
-    keyframeHint.textContent = keyframe.note
-      ? `At ${timestamp}, ${keyframe.note.replace(/^Compare/, 'compare')} Click the dot to jump there.`
-      : `Click the dot to jump to ${timestamp}.`;
-    keyframeJump.addEventListener('click', () => seekTogether(keyframe.time), options);
-  }
+  let autoplayPending = autoplay;
+  let pendingTime = startTime;
 
   function updateTime() {
     const current = Math.min(leader.currentTime, duration);
@@ -237,9 +144,12 @@ function bindComparisonTimeline(panel, videos, keyframe) {
     duration = durations.every(value => Number.isFinite(value) && value > 0) ? Math.min(...durations) : 0;
     slider.max = String(duration || 1);
     button.disabled = slider.disabled = duration === 0;
-    keyframeJump.hidden = keyframeHint.hidden = !keyframe || duration === 0 || keyframe.time >= duration;
-    if (!keyframeJump.hidden) keyframeJump.style.left = `${(keyframe.time / duration) * 100}%`;
-    updateTime();
+    if (duration > 0 && pendingTime > 0) {
+      seekAll(Math.min(pendingTime, duration));
+      pendingTime = 0;
+    } else {
+      updateTime();
+    }
     if (autoplayPending && duration > 0) {
       autoplayPending = false;
       playAll();
@@ -290,6 +200,12 @@ function bindComparisonTimeline(panel, videos, keyframe) {
     if (currentRequest === request && results.some(result => result.status === 'rejected')) showPlaybackError();
   }
 
+  function finishPlayback() {
+    pauseAll();
+    seekAll(loop ? 0 : duration);
+    if (loop) playAll();
+  }
+
   button.addEventListener('click', () => {
     if (playing) pauseAll();
     else playAll();
@@ -300,8 +216,7 @@ function bindComparisonTimeline(panel, videos, keyframe) {
   leader.addEventListener('timeupdate', () => {
     const time = leader.currentTime;
     if (playing && !leader.seeking && time >= duration) {
-      pauseAll();
-      seekAll(duration);
+      finishPlayback();
       return;
     }
     if (playing && !leader.seeking) {
@@ -312,7 +227,7 @@ function bindComparisonTimeline(panel, videos, keyframe) {
     updateTime();
   }, options);
   leader.addEventListener('ended', () => {
-    if (playing) pauseAll();
+    if (playing && leader.ended) finishPlayback();
   }, options);
   for (const video of videos) {
     video.addEventListener('pause', () => {
@@ -329,6 +244,13 @@ function bindComparisonTimeline(panel, videos, keyframe) {
   updateDuration();
 
   return {
+    get playback() {
+      const active = videos.find(video => !video.paused && !video.ended);
+      return {
+        startTime: pendingTime || (active ?? leader).currentTime,
+        autoplay: autoplayPending || Boolean(active),
+      };
+    },
     setVisible(visible) {
       autoplayPending = visible && duration === 0;
       if (!visible) pauseAll();
@@ -380,21 +302,38 @@ function renderVideoGallery(scenes) {
   if (skierIndex > 0) examples.unshift(examples.splice(skierIndex, 1)[0]);
 
   const panel = gallery.querySelector('#video-comparison');
-  const primary = panel.querySelector('.video-primary');
-  const baselines = panel.querySelector('.video-baselines');
-  bindSceneSwitcher(gallery, panel, examples, scene => {
+  const row = panel.querySelector('.comparison');
+  const zoom = panel.querySelector('.comparison-zoom');
+  const zoomLabel = zoom.querySelector('span');
+
+  function loadClips(scene, { expanded = false, startTime = 0, autoplay = false } = {}) {
     comparisonTimeline?.dispose();
+    panel.classList.toggle('is-zoomed', expanded);
+    zoomLabel.textContent = expanded ? 'Reset view' : 'Zoom in';
+    row.replaceChildren(...comparisonEntries(scene).map(entry => makeTile(scene, entry, expanded)));
+    comparisonTimeline = bindComparisonTimeline(panel, [...row.querySelectorAll('video')], {
+      startTime, autoplay, loop: expanded,
+    });
+  }
+
+  panel.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && panel.classList.contains('is-zoomed')) zoom.click();
+  });
+
+  bindSceneSwitcher(gallery, panel, examples, scene => {
     panel.querySelector('.prompt').textContent = `“${scene.prompt}”`;
-    const entries = comparisonEntries(scene);
-    const primaryTiles = [];
-    const baselineTiles = [];
-    for (const [key, name, source] of entries) {
-      const tiles = key === 'original' || key === 'autocache' ? primaryTiles : baselineTiles;
-      tiles.push(makeTile(name, source, scene));
-    }
-    primary.replaceChildren(...primaryTiles);
-    baselines.replaceChildren(...baselineTiles);
-    comparisonTimeline = bindComparisonTimeline(panel, [...panel.querySelectorAll('video')], scene.keyframe);
+    const detail = scene.videoDetail;
+    zoom.hidden = !detail;
+    const detailHint = detail?.label ?? '';
+    zoom.title = detailHint;
+    zoom.onclick = detail ? () => {
+      const expanded = panel.classList.contains('is-zoomed');
+      const { startTime, autoplay } = comparisonTimeline.playback;
+      loadClips(scene, { expanded: !expanded, startTime, autoplay: !expanded || autoplay });
+      zoom.title = expanded ? detailHint : 'Restore full frame';
+    } : null;
+    loadClips(scene);
+    row.scrollLeft = 0;
     if (comparisonInView) comparisonTimeline?.setVisible(true);
   });
 }
@@ -405,11 +344,32 @@ function renderImageGallery(scenes) {
   const panel = gallery.querySelector('#image-comparison');
   const row = panel.querySelector('.comparison');
   const focus = panel.querySelector('.scene-focus');
+  const zoom = panel.querySelector('.comparison-zoom');
+  const zoomLabel = zoom.querySelector('span');
+
+  function setZoom(expanded) {
+    panel.classList.toggle('is-zoomed', expanded);
+    zoomLabel.textContent = expanded ? 'Reset view' : 'Zoom in';
+  }
+
+  zoom.addEventListener('click', () => setZoom(!panel.classList.contains('is-zoomed')));
+  panel.addEventListener('keydown', event => {
+    if (event.key === 'Escape') setZoom(false);
+  });
 
   bindSceneSwitcher(gallery, panel, examples, scene => {
     panel.querySelector('.prompt').textContent = `“${scene.prompt}”`;
-    const entries = comparisonEntries(scene);
-    row.replaceChildren(...entries.map(([, name, source]) => makeTile(name, source, scene)));
+    setZoom(false);
+    zoom.hidden = !scene.hotspot;
+    zoom.title = scene.hotspot?.label ?? '';
+    if (scene.hotspot) {
+      const [left, top, width, height] = scene.hotspot.box;
+      const centerX = left + width / 2;
+      const centerY = top + height / 2;
+      row.style.setProperty('--zoom-origin', `${centerX}% ${centerY}%`);
+      row.style.setProperty('--zoom-transform', `translate(${50 - centerX}%, ${50 - centerY}%) scale(${100 / Math.min(width, height)})`);
+    }
+    row.replaceChildren(...comparisonEntries(scene).map(entry => makeTile(scene, entry)));
     row.scrollLeft = 0;
     const [model, benchmark] = scene.model?.split(' · ', 2) ?? [];
     panel.querySelector('.case-note').textContent =
@@ -488,6 +448,5 @@ const selectedVideos = window.autoCacheMedia
   .map(({ id }) => scenes.find(scene => scene.id === id))
   .filter(scene => scene?.kind === 'video');
 const videoScenes = selectedVideos.length ? selectedVideos : scenes;
-renderShowcase(window.autoCacheShowcase ?? []);
 renderVideoGallery(videoScenes);
 renderImageGallery(scenes);

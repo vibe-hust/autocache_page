@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="AutoCache uses an LLM agent to discover caching policies for image and video generation. Explore matched results and measured speedups.">
   <title>AutoCache: Agent-Designed Caching for Image and Video Generation</title>
-  <link rel="stylesheet" href="site.css?v=normal-scroll-20261126">
-  <script src="assets/media/manifest.js" defer></script>
-  <script src="assets/media/showcase.js" defer></script>
-  <script src="app.js?v=normal-scroll-20261126" defer></script>
+  <link rel="stylesheet" href="site.css?v=overview-method-spacing-2">
+  <script src="assets/media/manifest.js?v=video-detail" defer></script>
+  <script src="app.js?v=continuous-video-zoom" defer></script>
   <link rel="stylesheet" href="./project-meta.css">
   <link rel="canonical" href="https://vibe-hust.github.io/autocache_page/">
 </head>
@@ -40,30 +39,6 @@
           </div>
         </div>
     </header>
-    <p class="media-shell hero-description">AutoCache makes image and video generation faster by reusing earlier calculations.</p>
-    <div class="hero-showcase">
-      <figure class="media-shell hero-figure" id="hero-comparison" aria-label="Original and AutoCache video showcase">
-        <div class="scene-switcher" role="group" aria-label="Showcase scenes"></div>
-        <div class="hero-stage">
-          <div class="hero-panels" id="hero-panels"></div>
-          <button class="carousel-arrow carousel-prev" type="button" aria-label="Previous video example" aria-controls="hero-panels" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#carousel-arrow-icon"></use></svg></button>
-          <button class="carousel-arrow carousel-next" type="button" aria-label="Next video example" aria-controls="hero-panels" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#carousel-arrow-icon"></use></svg></button>
-        </div>
-        <figcaption class="hero-caption">
-          <span class="prompt" aria-live="polite"></span>
-          <button class="play" type="button" hidden></button>
-          <span class="video-status" role="status" hidden></span>
-        </figcaption>
-      </figure>
-    </div>
-    <div class="media-shell hero-overview">
-      <ul class="hero-results" aria-label="AutoCache Single speedups">
-        <li><strong>3.14×</strong> Qwen-Image-2.1</li>
-        <li><strong>1.99×</strong> FLUX3-Image-Klein-Base</li>
-        <li><strong>2.41×</strong> Wan2.1-T2V-1.3B</li>
-      </ul>
-      <p class="hero-baseline">Measured generation speedup over uncached inference · DrawBench for images · VBench for video</p>
-    </div>
 
     <section class="media-shell section" id="abstract" aria-labelledby="abstract-heading">
       <h2 id="abstract-heading">Overview</h2>
@@ -98,33 +73,47 @@
       </figure>
     </section>
 
+    <div class="media-shell hero-overview">
+      <ul class="hero-results" aria-label="AutoCache Single speedups">
+        <li><strong>3.14×</strong> Qwen-Image-2.1</li>
+        <li><strong>1.99×</strong> FLUX3-Image-Klein-Base</li>
+        <li><strong>2.41×</strong> Wan2.1-T2V-1.3B</li>
+      </ul>
+      <p class="hero-baseline">Measured generation speedup over uncached inference · DrawBench for images · VBench for video</p>
+    </div>
+
     <section class="section" id="videos" aria-labelledby="videos-heading">
       <div class="media-shell">
         <h2 id="videos-heading">Video comparisons</h2>
         <div id="video-gallery">
           <div class="scene-switcher" role="group" aria-label="Video scenes"></div>
           <article class="case" id="video-comparison" data-kind="video">
-            <p class="prompt" aria-live="polite"></p>
+            <div class="comparison-toolbar">
+              <p class="prompt" aria-live="polite"></p>
+              <button class="comparison-zoom" type="button" aria-controls="comparison-videos" hidden>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#zoom-icon"></use>
+                  <path class="zoom-plus" d="M10 7.5v5"></path>
+                </svg>
+                <span>Zoom in</span>
+              </button>
+            </div>
             <div class="video-stage">
-              <div class="video-grid" id="comparison-videos">
-                <div class="comparison video-primary" role="group" aria-label="Original and AutoCache"></div>
-                <div class="comparison video-baselines" role="group" aria-label="Caching baselines"></div>
-              </div>
+              <div class="comparison" id="comparison-videos" role="group" aria-label="Video outputs and difference maps"></div>
               <button class="carousel-arrow carousel-prev" type="button" aria-label="Previous comparison scene" aria-controls="comparison-videos" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#carousel-arrow-icon"></use></svg></button>
               <button class="carousel-arrow carousel-next" type="button" aria-label="Next comparison scene" aria-controls="comparison-videos" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#carousel-arrow-icon"></use></svg></button>
             </div>
             <div class="video-controls" hidden>
               <button class="play" type="button" disabled>Play all</button>
-              <div class="video-track">
-                <input class="video-seek" type="range" min="0" max="1" step="0.01" value="0" aria-label="Seek all comparison videos" disabled>
-                <div class="video-markers">
-                  <button class="keyframe-jump" type="button" aria-controls="comparison-videos" hidden></button>
-                </div>
-              </div>
+              <input class="video-seek" type="range" min="0" max="1" step="0.01" value="0" aria-label="Seek all comparison videos" disabled>
               <span class="video-time" aria-hidden="true"></span>
-              <p class="video-keyframe-hint" hidden></p>
             </div>
             <p class="video-status" role="status" hidden></p>
+            <div class="difference-key" role="group" aria-label="Shared color scale for mean absolute RGB difference">
+              <strong>Difference from Original</strong>
+              <div class="difference-gradient" aria-hidden="true"></div>
+              <div class="difference-ticks"><span>0%</span><span>12.5%</span><span>≥25%</span></div>
+            </div>
           </article>
         </div>
       </div>
@@ -132,18 +121,29 @@
 
     <section class="section" id="images" aria-labelledby="images-heading">
       <div class="media-shell">
-        <header class="image-heading">
-          <h2 id="images-heading">Image comparisons</h2>
-          <p class="image-zoom-hint">Click <span class="magnifier-icon" role="img" aria-label="the magnifier"></span> to zoom in.</p>
-        </header>
+        <h2 id="images-heading">Image comparisons</h2>
         <div id="image-gallery">
           <div class="scene-switcher" role="group" aria-label="Image scenes"></div>
           <article class="case" id="image-comparison" data-kind="image">
-            <p class="prompt" aria-live="polite"></p>
+            <div class="comparison-toolbar">
+              <p class="prompt" aria-live="polite"></p>
+              <button class="comparison-zoom" type="button" aria-controls="comparison-images" hidden>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="#zoom-icon"></use>
+                  <path class="zoom-plus" d="M10 7.5v5"></path>
+                </svg>
+                <span>Zoom in</span>
+              </button>
+            </div>
             <div class="image-stage">
-              <div class="comparison" id="comparison-images"></div>
+              <div class="comparison" id="comparison-images" role="group" aria-label="Image outputs and difference maps"></div>
               <button class="carousel-arrow carousel-prev" type="button" aria-label="Previous image scene" aria-controls="comparison-images" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#carousel-arrow-icon"></use></svg></button>
               <button class="carousel-arrow carousel-next" type="button" aria-label="Next image scene" aria-controls="comparison-images" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#carousel-arrow-icon"></use></svg></button>
+            </div>
+            <div class="difference-key" role="group" aria-label="Shared color scale for mean absolute RGB difference">
+              <strong>Difference from Original</strong>
+              <div class="difference-gradient" aria-hidden="true"></div>
+              <div class="difference-ticks"><span>0%</span><span>12.5%</span><span>≥25%</span></div>
             </div>
             <p class="case-note"></p>
             <p class="scene-focus" aria-live="polite" hidden></p>
@@ -253,6 +253,10 @@
     </symbol>
     <symbol id="carousel-arrow-icon" viewBox="0 0 24 24">
       <path d="M19 12H5m6-6-6 6 6 6"/>
+    </symbol>
+    <symbol id="zoom-icon" viewBox="0 0 24 24">
+      <circle cx="10" cy="10" r="6"/>
+      <path d="m14.5 14.5 5 5M7.5 10h5"/>
     </symbol>
     <symbol id="scene-icon-video" viewBox="0 0 24 24">
       <rect x="3" y="5" width="18" height="14" rx="2"/>
