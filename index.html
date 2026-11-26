@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="AutoCache uses an LLM agent to discover caching policies for image and video generation. Explore matched results and measured speedups.">
   <title>AutoCache: Agent-Designed Caching for Image and Video Generation</title>
-  <link rel="stylesheet" href="site.css?v=wider-image-comparisons">
+  <link rel="stylesheet" href="site.css?v=plain-copy-20261126">
   <script src="assets/media/manifest.js" defer></script>
   <script src="assets/media/showcase.js" defer></script>
   <script src="app.js?v=showcase-open" defer></script>
@@ -17,7 +17,7 @@
     <div class="media-shell site-header-inner">
       <a class="site-brand" href="#top">AutoCache</a>
       <nav aria-label="On this page">
-        <a href="#abstract">Abstract</a>
+        <a href="#abstract">Overview</a>
         <a href="#method">Method</a>
         <a href="#videos">Video results</a>
         <a href="#images">Image results</a>
@@ -40,7 +40,7 @@
           </div>
         </div>
     </header>
-    <p class="media-shell hero-description">AutoCache speeds up diffusion inference by reusing computation across denoising steps.</p>
+    <p class="media-shell hero-description">AutoCache makes image and video generation faster by reusing earlier calculations.</p>
     <div class="hero-showcase">
       <figure class="media-shell hero-figure" id="hero-comparison" aria-label="Original and AutoCache video showcase">
         <div class="scene-switcher" role="group" aria-label="Showcase scenes"></div>
@@ -69,21 +69,26 @@
     </div>
 
     <section class="media-shell section" id="abstract" aria-labelledby="abstract-heading">
-      <h2 id="abstract-heading">Abstract</h2>
-      <p class="abstract-copy">Diffusion sampling is expensive because it repeatedly evaluates a large backbone. Caching accelerates it by reusing computations across steps. Existing methods use hand-designed signals and decision rules to determine when reuse is appropriate. These choices require expertise to develop. We introduce <strong>AutoCache</strong>, a training-free framework that uses a large language model (LLM) search agent to automatically discover caching policies for image and video generation. Each policy extracts signals from the sampling state and decides whether to compute the full backbone or reuse its cached residual. AutoCache searches these policies through repeated proposal and evaluation. The selected policies run directly during sampling without additional LLM calls. Across Qwen-Image-2.1, FLUX3-Image-Klein-Base, and Wan2.1-T2V-1.3B, one selected policy per backbone achieves 1.99–3.14× speedups over uncached inference while improving reference fidelity over the evaluated caching baselines.</p>
+      <h2 id="abstract-heading">Overview</h2>
+      <p class="abstract-copy"><strong>AutoCache</strong> uses an AI agent to find when a model can reuse earlier calculations. After this search, the selected rule runs on its own: no retraining and no more agent calls.</p>
+      <p class="abstract-copy">Across three tested image and video models, generation is <strong>1.99–3.14× faster</strong> than running without caching. Outputs also stay closer to the uncached results than with the compared caching methods.</p>
     </section>
 
     <section class="media-shell section" id="method" aria-labelledby="method-heading">
       <h2 id="method-heading">Method</h2>
-      <p class="method-lead">Given observations about the sampling state and cache history, an agent writes a signal extractor and an updater. It evaluates candidate policies on a development set and freezes the selected policies. At inference, <strong>NEW</strong> reruns the backbone blocks and updates the cached residual. <strong>REUSE</strong> skips those blocks and adds the cached residual to the current features. The backbone stays frozen, and inference requires no LLM calls.</p>
+      <ol class="method-summary">
+        <li><strong>Search.</strong> An AI agent writes and tests caching rules on a development set.</li>
+        <li><strong>Choose.</strong> Select a rule for each model and keep it fixed.</li>
+        <li><strong>Generate.</strong> <strong>NEW</strong> computes a fresh update from the model blocks. <strong>REUSE</strong> applies their saved update instead.</li>
+      </ol>
       <figure class="method-walkthrough" id="method-walkthrough">
         <div class="method-chapters" role="group" aria-label="Animation chapters">
           <button type="button" data-start="0" aria-controls="method-video" aria-current="true">Speedup</button>
-          <button type="button" data-start="17.5" aria-controls="method-video">Agent observations</button>
-          <button type="button" data-start="25.3" aria-controls="method-video">Agent actions</button>
-          <button type="button" data-start="43.8" aria-controls="method-video">Denoising trajectory</button>
+          <button type="button" data-start="17.5" aria-controls="method-video">What the agent sees</button>
+          <button type="button" data-start="25.3" aria-controls="method-video">What the agent changes</button>
+          <button type="button" data-start="43.8" aria-controls="method-video">Generation steps</button>
           <button type="button" data-start="80" aria-controls="method-video">Search round</button>
-          <button type="button" data-start="90.9" aria-controls="method-video">Candidate evaluation</button>
+          <button type="button" data-start="90.9" aria-controls="method-video">Test the rules</button>
           <button type="button" data-start="102.5" aria-controls="method-video">Overview</button>
         </div>
         <video id="method-video" controls muted playsinline preload="metadata" width="1920" height="1080"
@@ -92,7 +97,7 @@
           <source src="assets/media/method-walkthrough.mp4" type="video/mp4">
           <a href="assets/media/method-walkthrough.mp4">Download the method animation</a>
         </video>
-        <figcaption class="result-note" id="race-caption">The opening compares backbone calls across two 40-step denoising trajectories. On held-out DrawBench, mean Qwen-Image-2.1 latency drops from <strong>8.82 s to 2.81 s per image</strong> on H100 at batch size one.</figcaption>
+        <figcaption class="result-note" id="race-caption">The animation compares two 40-step generation runs. In the held-out DrawBench test, Qwen-Image-2.1 averages <strong>2.81 s per image with AutoCache, down from 8.82 s</strong> without caching (H100, batch size one).</figcaption>
       </figure>
     </section>
 
@@ -151,7 +156,7 @@
     </section>
 
     <section class="media-shell section" id="results" aria-labelledby="results-heading">
-      <h2 id="results-heading">Speed and reference fidelity</h2>
+      <h2 id="results-heading">Speed and output similarity</h2>
       <figure class="result-figure">
         <img src="assets/paper/figure1.svg" width="1260" height="288" alt="Figure 1. Reference fidelity and speed comparisons for Qwen-Image-2.1, FLUX3-Image-Klein-Base, and Wan2.1-1.3B, with the Qwen-Image-2.1 PSNR–speedup trade-off." aria-describedby="figure1-caption" loading="lazy">
         <figcaption id="figure1-caption">
@@ -161,11 +166,21 @@
             <span style="--swatch: #47c1a3">DiCache (ICLR 2026)</span>
             <span style="--swatch: #e76f51">AutoCache (Ours)</span>
           </div>
-          <p class="result-note">AutoCache Single outperforms the reported caching baselines on PSNR, SSIM, and LPIPS across all three backbones. On Qwen-Image-2.1, it improves PSNR from 25.60 to <strong>29.43 dB</strong> and reduces latency from 2.95 to 2.81 s per image compared with MagCache, the fastest baseline. Compared with SeaCache, AutoCache raises PSNR from 31.92 to <strong>32.80 dB</strong> on FLUX3 and from 24.47 to <strong>25.51 dB</strong> on Wan2.1. On Wan2.1, speedup also increases from 2.15× to 2.41×. The radar plots report the best result for each metric across selected policies, with maximum speedups of 3.38× on Qwen, 2.58× on FLUX3, and 2.45× on Wan2.1.</p>
+          <p class="result-note"><strong>AutoCache Single uses one selected rule per model.</strong> It scores better on PSNR, SSIM, and LPIPS than the reported caching baselines on all three models. These metrics compare outputs with the results generated without caching.</p>
+          <p class="result-note"><strong>The radar plots show the best score for each metric across several rules.</strong> Those scores may come from different rules.</p>
+          <details class="result-details">
+            <summary>See the numbers</summary>
+            <ul>
+              <li><strong>Qwen:</strong> PSNR rises from 25.60 to 29.43 dB, while time per image falls from 2.95 to 2.81 s, compared with MagCache, the fastest baseline.</li>
+              <li><strong>FLUX3:</strong> PSNR rises from 31.92 to 32.80 dB compared with SeaCache.</li>
+              <li><strong>Wan2.1:</strong> PSNR rises from 24.47 to 25.51 dB, and speedup rises from 2.15× to 2.41×, compared with SeaCache.</li>
+              <li><strong>Best speedups across selected rules:</strong> 3.38× on Qwen, 2.58× on FLUX3, and 2.45× on Wan2.1.</li>
+            </ul>
+          </details>
         </figcaption>
       </figure>
       <section class="evaluation-setup" aria-labelledby="benchmark-scope-title">
-        <h3 id="benchmark-scope-title">Backbones and benchmarks</h3>
+        <h3 id="benchmark-scope-title">Models and test sets</h3>
         <div class="transfer-table">
           <table aria-labelledby="benchmark-scope-title">
             <thead>
@@ -183,7 +198,7 @@
 
     <section class="section transfer" aria-labelledby="transfer-heading">
       <div class="media-shell">
-        <h2 id="transfer-heading">Frozen-policy transfer</h2>
+        <h2 id="transfer-heading">Reuse the same rule</h2>
         <div class="transfer-grid">
           <div class="transfer-table">
             <table>
@@ -215,7 +230,16 @@
             </table>
           </div>
         </div>
-        <p class="result-note">The frozen FLUX3 policy transfers from FLUX3-Image-Klein-Base (5.6B, 1024 × 1024) to FLUX.1-dev (12B, 256 × 256). On 170 DrawBench prompts, it achieves the highest reference fidelity across PSNR, SSIM, and LPIPS, reaching <strong>31.64 dB PSNR at 1.96×</strong> speedup. SeaCache has the highest speedup among the 50-step methods at 2.28×. The Qwen policy discovered on DrawBench is applied unchanged to 800 GenEval 2 prompts. On matched prompt–seed pairs, it outperforms DiCache and SeaCache on all three fidelity metrics and speedup, reaching <strong>27.50 dB PSNR at 3.02×</strong>. Both transfers use the frozen policy programs without a new search.</p>
+        <p class="result-note">Both tests reuse the selected rules <strong>without another search</strong>.</p>
+        <p class="result-note"><strong>FLUX3 → FLUX.1-dev:</strong> AutoCache has the best output similarity on all three metrics, with <strong>31.64 dB PSNR at 1.96× speedup</strong>. SeaCache is faster at 2.28× among the 50-step methods.</p>
+        <p class="result-note"><strong>DrawBench → GenEval 2:</strong> The same Qwen rule reaches <strong>27.50 dB PSNR at 3.02× speedup</strong>, ahead of DiCache and SeaCache on all three similarity metrics and speed.</p>
+        <details class="result-details">
+          <summary>Test setup</summary>
+          <ul>
+            <li><strong>Model transfer:</strong> The rule from FLUX3-Image-Klein-Base (5.6B, 1024 × 1024) runs unchanged on FLUX.1-dev (12B, 256 × 256), using 170 DrawBench prompts.</li>
+            <li><strong>Test-set transfer:</strong> The Qwen rule found on DrawBench runs unchanged on 800 GenEval 2 prompts. Methods use matched prompts and seeds.</li>
+          </ul>
+        </details>
       </div>
     </section>
   </main>

@@ -189,3 +189,15 @@ h2 { font-size: clamp(1.7rem, 3.7vw, 2.45rem); line-height: 1.13; letter-spacing
   nav a { font-size: .82rem; }
   .tile > figcaption { top: 4px; left: 4px; padding: 2px 4px; font-size: .78rem; }
 }
+
+/* Short explanations first; detailed comparisons remain available on demand. */
+.method-summary { margin: 14px 0 0; padding-left: 1.4rem; color: var(--muted); line-height: 1.7; }
+.method-summary li + li { margin-top: .45rem; }
+.method-summary strong { color: var(--ink); }
+.result-details { margin-top: 16px; padding-top: 12px; border-top: 1px solid #dce0e5; font-size: .9rem; line-height: 1.65; color: var(--muted); }
+.result-details summary { width: fit-content; cursor: pointer; color: var(--blue); font-weight: 600; }
+.result-details summary:focus-visible { outline: 3px solid #246bbd; outline-offset: 4px; }
+.result-details ul { padding-left: 1.4rem; margin: 12px 0 0; }
+.result-details li + li { margin-top: .5rem; }
+#figure1-caption .result-note + .result-note,
+.transfer .result-note + .result-note { margin-top: 10px; }
