@@ -18,9 +18,10 @@
   .institution-logos .institution-cwi { width: 76px; }
   .institution-logos .institution-trento { width: 80px; }
 }
-/* AutoCache: white marks against the existing dark header. */
+/* AutoCache: dark slate marks against the warm alabaster header. */
 .site-header-inner { width: min(1280px, calc(100% - 48px)); min-height: 66px; flex-wrap: wrap; gap: 4px 24px; }
-.site-header .institution-hust, .site-header .institution-trento { filter: none; }
+.site-header .institution-logos img { filter: brightness(0) opacity(.84); transition: opacity 150ms ease, filter 150ms ease; }
+.site-header .institution-logos a:hover img { filter: brightness(0) opacity(1); }
 .site-header nav { margin-left: auto; gap: 6px 20px; }
 @media (max-width: 1000px) {
   .site-header-inner { align-items: flex-start; flex-direction: column; }
