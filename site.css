@@ -169,3 +169,53 @@ h2 { font-size: clamp(1.7rem, 3.7vw, 2.45rem); line-height: 1.13; letter-spacing
 .result-details li + li { margin-top: .5rem; }
 #figure1-caption .result-note + .result-note,
 .transfer .result-note + .result-note { margin-top: 10px; }
+
+.citation-card {
+  max-width: 52rem;
+  margin: 20px auto 0;
+  border: 1px solid #dce3ec;
+  border-radius: var(--media-radius);
+  background: #f7f9fc;
+  overflow: hidden;
+}
+.citation-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #dce3ec;
+  background: #eef3f8;
+}
+.citation-label {
+  color: var(--muted);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.copy-bibtex {
+  padding: 5px 12px;
+  border: 1px solid #c4d0df;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  font-size: .84rem;
+  font-weight: 600;
+}
+.copy-bibtex:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.bibtex-code {
+  margin: 0;
+  padding: 16px 18px;
+  overflow-x: auto;
+  color: var(--ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: .86rem;
+  line-height: 1.65;
+}
+@media (max-width: 800px) {
+  .citation-section.media-shell { width: calc(100% - 32px); }
+}

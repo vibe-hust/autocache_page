@@ -450,3 +450,27 @@ const selectedVideos = window.autoCacheMedia
 const videoScenes = selectedVideos.length ? selectedVideos : scenes;
 renderVideoGallery(videoScenes);
 renderImageGallery(scenes);
+
+document.querySelectorAll('.copy-bibtex').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const target = document.getElementById(btn.dataset.copyTarget);
+    if (!target) return;
+    const text = target.textContent.trim();
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    }
+    const prev = btn.textContent;
+    btn.textContent = 'Copied';
+    setTimeout(() => { btn.textContent = prev; }, 1800);
+  });
+});
